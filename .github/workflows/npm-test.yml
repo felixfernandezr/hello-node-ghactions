@@ -20,12 +20,19 @@ jobs:
         with:
           node-version: '20'
 
-      # Step 3: Install dependencies
-      - name: Install Dependencies
-        run: | 
-            npm install
-            npm install --save-dev jest
+      # Step 3: Cache Node.js dependencies
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-      # Step 4: Run tests
+      # Step 4: Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Step 5: Run tests
       - name: Run Tests
         run: npm test
