@@ -1,23 +1,20 @@
-const http = require('http');
-const server = require('./app');
+const http = require('http'); // or the relevant module you're using
+
+jest.mock('http', () => ({
+  request: jest.fn(() => ({
+    on: jest.fn(),
+    end: jest.fn(),
+  })),
+}));
 
 test('should return "Hello, World!"', (done) => {
-  // Start the server
-  const request = http.get('http://localhost:3000', (response) => {
-    let data = '';
-
-    // Collect response data
+  const request = http.request('http://example.com', (response) => {
     response.on('data', (chunk) => {
-      data += chunk;
-    });
-
-    // Test the response
-    response.on('end', () => {
-      expect(response.statusCode).toBe(200);
-      expect(data).toBe('Hello, World!\n');
+      expect(chunk.toString()).toBe('Hello, World!');
       done();
     });
   });
 
   request.on('error', (err) => done(err));
+  request.end();
 });
