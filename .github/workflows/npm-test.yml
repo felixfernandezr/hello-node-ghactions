@@ -51,5 +51,3 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SQ_HOST_URL }}
-          project-key: 'hello-world-node-app'   # Your project key here
-          project-name: 'Hello World Node.js App'
