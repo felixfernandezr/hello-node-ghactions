@@ -36,3 +36,20 @@ jobs:
       # Step 5: Run tests
       - name: Run Tests
         run: npm test
+
+  sonarqube-analysis:
+    name: SonarQube Analysis
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v3
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SQ_HOST_URL }}
+          project-key: 'hello-world-node-app'   # Your project key here
+          project-name: 'Hello World Node.js App'
