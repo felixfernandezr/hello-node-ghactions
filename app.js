@@ -5,11 +5,11 @@ const server = http.createServer((req, res) => {
   res.end('Hello, World!\n');
 });
 
-// Start the server if this file is executed directly
-if (require.main === module) {
-  server.listen(3000, () => {
+// Export a function to start the server
+const startServer = () => {
+  return server.listen(3000, () => {
     console.log('Server running at http://localhost:3000/');
   });
-}
+};
 
-module.exports = server;
+module.exports = { startServer, server };
