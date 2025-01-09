@@ -1,11 +1,14 @@
 # Setup Node.js runtime
-FROM node:16-alpine
+FROM node:16-alpine3.19
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
 # Copy the package.json and package-lock.json
 COPY package*.json ./
+
+# Update semver and other dependencies first
+RUN npm install semver@7.5.2  # Update semver to the fixed version
 
 # Install dependencies
 RUN npm install
