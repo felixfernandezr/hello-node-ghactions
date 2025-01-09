@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Update semver and other dependencies first
-RUN npm install semver@7.5.2  # Update semver to the fixed version
+RUN npm install semver@7.5.2
 
 # Install dependencies
 RUN npm install
