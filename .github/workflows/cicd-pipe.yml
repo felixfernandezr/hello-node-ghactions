@@ -142,7 +142,6 @@ jobs:
               my-docker-swarm-service || \
             docker service create \
               --name my-docker-swarm-service \
-              --replicas 3 \
               --publish 80:80 \
               --with-registry-auth \
               ghcr.io/${{ github.repository }}/hello-world-node-app:latest
