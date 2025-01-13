@@ -126,4 +126,23 @@ jobs:
       # Push the Docker image to GHCR
       - name: Push Docker image to GHCR
         run: |
-          docker push ghcr.io/${{ github.repository }}/hello-world-node-app:latest          
+          docker push ghcr.io/${{ github.repository }}/hello-world-node-app:latest     
+          
+       # Step 4: SSH into the Azure VM and deploy to Docker Swarm
+      - name: Deploy to Docker Swarm
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{ secrets.SWARM_VM_HOST }}
+          username: ${{ secrets.SWARM_VM_USER }}
+          password: ${{ secrets.SWARM_VM_SSH_PRIVATE_KEY }}
+          script: |
+            docker service update \
+              --image ghcr.io/${{ github.repository }}/hello-world-node-app:latest \
+              --with-registry-auth \
+              my-docker-swarm-service || \
+            docker service create \
+              --name my-docker-swarm-service \
+              --replicas 3 \
+              --publish 80:80 \
+              --with-registry-auth \
+              ghcr.io/${{ github.repository }}/hello-world-node-app:latest
