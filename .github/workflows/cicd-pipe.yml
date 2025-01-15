@@ -139,7 +139,7 @@ jobs:
         with:
           host: ${{ secrets.SWARM_VM_HOST }}
           username: ${{ secrets.SWARM_VM_USER }}
-          password: ${{ secrets.SWARM_VM_SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SWARM_VM_SSH_PRIVATE_KEY }}
           script: |
             docker service update \
               --image ghcr.io/${{ github.repository }}/hello-world-node-app:latest \
