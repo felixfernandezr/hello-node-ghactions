@@ -130,7 +130,7 @@ jobs:
           
        # Step 4: SSH into the Azure VM and deploy to Docker Swarm
       - name: Deploy to Docker Swarm
-        uses: appleboy/ssh-action@v0.1.2
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.SWARM_VM_HOST }}
           username: ${{ secrets.SWARM_VM_USER }}
