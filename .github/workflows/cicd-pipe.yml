@@ -142,7 +142,7 @@ jobs:
               --image ghcr.io/${{ github.repository }}/hello-world-node-app:latest \
               --with-registry-auth \
               hello-node-docker-swarm-service || \
-            (docker swarm init && || true) \
+            (docker swarm init || true) && \
             docker service create \
               --name hello-node-docker-swarm-service \
               --publish 80:80 \
