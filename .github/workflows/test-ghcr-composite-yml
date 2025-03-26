@@ -1,0 +1,63 @@
+name: Run npm test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run npm test composite action
+        uses: ./.github/composite-actions/npm-test
+        with:
+          node-version: '20'
+          
+  ghcr-cd:
+    name: Build and Push Docker Image to GHCR
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Cache Docker layers
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      # Set up Docker Buildx (needed for multi-platform builds)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Build the Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/hello-world-node-app:latest .
+
+      # Log in to GitHub Container Registry (GHCR)
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITH_TOKEN }}
+
+      # Tag the Docker image for GHCR
+      - name: Tag Docker image for GHCR
+        run: |
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/hello-world-node-app:latest ghcr.io/${{ github.repository }}/hello-world-node-app:latest
+
+      # Push the Docker image to GHCR
+      - name: Push Docker image to GHCR
+        run: |
+          docker push ghcr.io/${{ github.repository }}/hello-world-node-app:latest
+          
