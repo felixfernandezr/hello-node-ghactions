@@ -129,15 +129,15 @@ jobs:
           docker push ghcr.io/${{ github.repository }}/hello-world-node-app:latest    
           
        # Step 4: SSH into the Azure VM and deploy to Docker Swarm
-      - name: Deploy to Docker Swarm
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.SWARM_VM_HOST }}
-          username: ${{ secrets.SWARM_VM_USER }}
-          key: ${{ secrets.SWARM_VM_SSH_PRIVATE_KEY }}
-          script: |
-            echo "${{ secrets.GITH_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin && \
-            docker service update --image ghcr.io/${{ github.repository }}/hello-world-node-app:latest --with-registry-auth hello-node-docker-swarm-service
+#      - name: Deploy to Docker Swarm
+#        uses: appleboy/ssh-action@v1.2.0
+#        with:
+#          host: ${{ secrets.SWARM_VM_HOST }}
+#          username: ${{ secrets.SWARM_VM_USER }}
+#          key: ${{ secrets.SWARM_VM_SSH_PRIVATE_KEY }}
+#          script: |
+#            echo "${{ secrets.GITH_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin && \
+#            docker service update --image ghcr.io/${{ github.repository }}/hello-world-node-app:latest --with-registry-auth hello-node-docker-swarm-service
 
 #            docker pull ghcr.io/${{ github.repository }}/hello-world-node-app:latest && \
 #            docker service create \
